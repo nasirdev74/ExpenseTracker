@@ -1,26 +1,52 @@
-//
-//  ContentView.swift
-//  ExpenseTracker
-//
-//  Created by Softcent on 4/12/22.
-//
-
 import SwiftUI
 
 struct ContentView: View {
-    var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
-        }
-        .padding()
-    }
+		var body: some View {
+				NavigationView {
+						ScrollView {
+								VStack(alignment: .leading, spacing: 24) {
+										// MARK: title
+										Text("Overview")
+												.font(.title2)
+												.bold()
+										
+										// MARK: Chart
+										ChartView()
+										
+										// MARK: Recent transaction list
+										RecentTransactionList()
+								} .padding()
+										.frame(maxWidth: .infinity)
+						}
+						.background(Color.background)
+						.navigationBarTitleDisplayMode(.inline)
+						.toolbar {
+								// MARK: Notification Icon
+								ToolbarItem {
+										Image(systemName: "bell.badge")
+												.symbolRenderingMode(.palette)
+												.foregroundStyle(Color.icon, .primary)
+								}
+						}
+				}
+				.navigationViewStyle(.stack)
+				.accentColor(.primary)
+		}
 }
 
 struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
+		static let transactionListVM: TransactionListViewModel = {
+				let transactionListVM = TransactionListViewModel()
+				transactionListVM.transactions = [transactionPreviewData]
+				return transactionListVM
+		}()
+
+		static var previews: some View {
+				Group {
+						ContentView()
+						ContentView()
+								.preferredColorScheme(.dark)
+				}
+						.environmentObject(transactionListVM)
+		}
 }
